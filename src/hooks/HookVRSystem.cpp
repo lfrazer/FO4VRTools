@@ -79,7 +79,7 @@ bool HookVRSystem::GetControllerState(vr::TrackedDeviceIndex_t unControllerDevic
 	const bool isTracking = vr_system->IsTrackedDeviceConnected(unControllerDeviceIndex);
 
 	// Dispatch the controller state to scaleform there are handlers registered
-	ScaleformVR::DispatchControllerState(hand, curState);
+	//ScaleformVR::DispatchControllerState(hand, curState);
 
 	if(result && isTracking)
 	{

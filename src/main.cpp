@@ -118,10 +118,12 @@ extern "C"
 		}
 
 		//Scaleform
+		/*
 		btest &= g_scaleform->Register("vrinput", ScaleformVR::RegisterFuncs);
 		if (btest) {
 			_MESSAGE("Scaleform Functions Register Succeeded");
 		}
+		*/
 
 		//OpenVR Hook
 		_MESSAGE("Hooking into OpenVR calls");
