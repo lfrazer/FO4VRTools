@@ -2,7 +2,7 @@
 #include <ctime>
 #include "hooks/openvr_hook.h"
 
-#define ENABLE_PAPYRUS 0  // Papyrus events will be disabled until I figure out how to fix them for FO4
+#define ENABLE_PAPYRUS 1  // Papyrus events will be disabled until I figure out how to fix them for FO4
 
 namespace PapyrusVR 
 {
@@ -31,8 +31,10 @@ namespace PapyrusVR
 		class EventQueueFunctor0 : public IFunctionArguments
 		{
 		public:
-			EventQueueFunctor0(BSFixedString & a_eventName)
-				: eventName(a_eventName.data) {}
+			EventQueueFunctor0(BSFixedString& a_eventName)
+			{
+				eventName = a_eventName;
+			}
 
 			virtual bool Copy(Output * dst) { return true; }
 
@@ -48,7 +50,7 @@ namespace PapyrusVR
 
 		template <typename T> void SetVMValue(VMValue * val, T arg)
 		{
-			VMClassRegistry * registry = (*g_skyrimVM)->GetClassRegistry();
+			VirtualMachine * registry = (*g_gameVM)->m_virtualMachine;
 			PackValue(val, &arg, registry);
 		}
 		template <> void SetVMValue<SInt32>(VMValue * val, SInt32 arg) { val->SetInt(arg); }
@@ -57,7 +59,10 @@ namespace PapyrusVR
 		{
 		public:
 			EventFunctor3(BSFixedString & a_eventName, SInt32 aParam1, SInt32 aPram2, SInt32 aParam3)
-				: eventName(a_eventName.data), param1(aParam1), param2(aPram2), param3(aParam3){}
+				: param1(aParam1), param2(aPram2), param3(aParam3)
+			{
+				eventName = a_eventName;
+			}
 
 			virtual bool Copy(Output * dst) 
 			{ 
@@ -283,7 +288,7 @@ namespace PapyrusVR
 		//Notify Papyrus scripts
 		if (g_vrButtonEventRegs.m_data.size() > 0)
 			g_vrButtonEventRegs.ForEach(
-				EventFunctor3(vrButtonEventName, eventType, buttonId, deviceId)
+				EventFunctor3( BSFixedString( vrButtonEventName), eventType, buttonId, deviceId)
 			);
 #endif
 	}
@@ -295,7 +300,7 @@ namespace PapyrusVR
 		//Notify Papyrus scripts
 		if (g_vrOverlapEventRegs.m_data.size() > 0)
 			g_vrOverlapEventRegs.ForEach(
-				EventFunctor3(vrOverlapEventName, eventType, objectHandle, deviceId)
+				EventFunctor3(BSFixedString(vrOverlapEventName), eventType, objectHandle, deviceId)
 			);
 #endif
 	}
@@ -307,7 +312,7 @@ namespace PapyrusVR
 		//Notify Papyrus scripts
 		if (g_vrHapticEventRegs.m_data.size() > 0)
 			g_vrHapticEventRegs.ForEach(
-				EventFunctor3(vrHapticEventName, axisID, pulseDuration, device)
+				EventFunctor3(BSFixedString(vrHapticEventName), axisID, pulseDuration, device)
 			);
 #endif
 	}

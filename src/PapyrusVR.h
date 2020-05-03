@@ -101,4 +101,70 @@ namespace PapyrusVR
 	//Generic method to handle all pose requests from Papyrus
 	void CopyPoseToVMArray(UInt32 deviceType, VMArray<float>* resultArray, PoseParam parameter, bool skyrimWorldSpace = false);
 	#pragma endregion
+
+
+	// Bit of a hack, bringing this class definition over from SKSE (Which does not exist in F4SE) to help compile the original PapyrusVR code without major changes
+	class IFunctionArguments
+	{
+	public:
+
+
+		// ??
+		struct Output
+		{
+			UInt32	unk00;		// 00
+			UInt32	unk04;		// 04
+			VMValue* m_data = nullptr;	// 08 - confirmed offset
+			UInt64	unk08;		// 10
+			UInt32	m_size = 0;		// 18 - confirmed offset
+
+			void FreeData()
+			{
+				if (m_data)
+				{
+					for (UInt32 i = 0; i < m_size; ++i)
+					{
+						m_data[i].~VMValue();
+					}
+
+					Heap_Free(m_data);
+					m_data = nullptr;
+				}
+			}
+
+			//void	Resize(UInt32 len) { CALL_MEMBER_FN(this, Resize)(len); }
+			// Replacing resize manually.. hopefully it works
+			void Resize(UInt32 len)
+			{
+				
+				FreeData();
+
+				m_data = (VMValue*)Heap_Allocate(sizeof(VMValue) * len);
+				m_size = len;
+
+				for (UInt32 i = 0; i < len; ++i)
+				{
+					new (&m_data[i]) VMValue();
+				}
+			}
+			
+			VMValue* Get(UInt32 idx) { return (idx < m_size) ? &m_data[idx] : NULL; }
+
+			~Output()
+			{
+				FreeData();
+			}
+
+			//MEMBER_FN_PREFIX(Output);
+			//DEFINE_MEMBER_FN(Resize, bool, 0x0095AA60, UInt32 len);
+		};
+
+		virtual ~IFunctionArguments()
+		{
+			
+		}
+
+		virtual bool	Copy(Output* dst) = 0;
+	};
+
 }
