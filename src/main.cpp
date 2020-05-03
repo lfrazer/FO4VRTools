@@ -47,8 +47,6 @@ extern "C"
 	
 	bool F4SEPlugin_Query(const F4SEInterface* f4se, PluginInfo* info)
 	{
-		//Test for enabling /GS security checks
-		__security_init_cookie();
 
 		gLog.OpenRelative(CSIDL_MYDOCUMENTS, "\\My Games\\Fallout4VR\\F4SE\\FO4VRTools.log");
 		gLog.SetPrintLevel(IDebugLog::kLevel_Error);
@@ -66,7 +64,7 @@ extern "C"
 
 			return false;
 		}
-		else if (f4se->runtimeVersion != RUNTIME_VR_VERSION_1_2_72)
+		else if (f4se->runtimeVersion < CURRENT_RELEASE_RUNTIME)
 		{
 			_MESSAGE("unsupported runtime version %08X", f4se->runtimeVersion);
 
@@ -95,11 +93,11 @@ extern "C"
 		if (g_messagingInterface && g_pluginHandle)
 		{
 			_MESSAGE("Registering for plugin loaded message!");
-			g_messagingInterface->RegisterListener(g_pluginHandle, "SKSE", OnF4SEMessageReceived);
+			g_messagingInterface->RegisterListener(g_pluginHandle, "F4SE", OnF4SEMessageReceived);
 		}
 
 		// Called by SKSE to load this plugin
-		_MESSAGE("SkyrimVRTools loaded");
+		_MESSAGE("FO4VRTools loaded");
 
 		g_papyrus = (F4SEPapyrusInterface *)f4se->QueryInterface(kInterface_Papyrus);
 		g_scaleform = (F4SEScaleformInterface *)f4se->QueryInterface(kInterface_Scaleform);
@@ -107,15 +105,19 @@ extern "C"
 		//Updates pointer
 		_MESSAGE("Current register plugin function at memory address: %p", PapyrusVR::RegisterForPoseUpdates);
 
+		bool btest = true;
+
 		//Debug
 		//__debugbreak();
 
 		//Papyrus
+		/*
 		_MESSAGE("Registering Papyrus native functions...");
-		bool btest = g_papyrus->Register(PapyrusVR::RegisterFuncs);
+		btest = g_papyrus->Register(PapyrusVR::RegisterFuncs);
 		if (btest) {
 			_MESSAGE("Papyrus Functions Register Succeeded");
 		}
+		*/
 
 		//Scaleform
 		/*

@@ -7,23 +7,23 @@
 namespace PapyrusVR 
 {
 
+	// static BSFixedString crashes FO4 -- We don't actually know why this ever worked in SkyrimVR
 
 	//Custom Pose Event
-	BSFixedString poseUpdateEventName("OnPosesUpdate");
+	const char* poseUpdateEventName = "OnPosesUpdate";
 	RegistrationSetHolder<TESForm*>				g_posesUpdateEventRegs;
 
 	//Custom Button Events
-	BSFixedString vrButtonEventName("OnVRButtonEvent");
+	const char* vrButtonEventName = "OnVRButtonEvent";
 	RegistrationSetHolder<TESForm*>				g_vrButtonEventRegs;
 
 	//Custom Overlap Events
-	BSFixedString vrOverlapEventName("OnVROverlapEvent");
+	const char* vrOverlapEventName = "OnVROverlapEvent";
 	RegistrationSetHolder<TESForm*>				g_vrOverlapEventRegs;
 
 	//Custom Haptics Events
-	BSFixedString vrHapticEventName("OnVRHapticEvent");
+	const char* vrHapticEventName = "OnVRHapticEvent";
 	RegistrationSetHolder<TESForm*>				g_vrHapticEventRegs;
-
 
 	// IFunctionArguments don't exist in fallout..
 #if ENABLE_PAPYRUS
