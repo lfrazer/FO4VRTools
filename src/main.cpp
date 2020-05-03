@@ -96,7 +96,7 @@ extern "C"
 			g_messagingInterface->RegisterListener(g_pluginHandle, "F4SE", OnF4SEMessageReceived);
 		}
 
-		// Called by SKSE to load this plugin
+		// Called by F4SE to load this plugin
 		_MESSAGE("FO4VRTools loaded");
 
 		g_papyrus = (F4SEPapyrusInterface *)f4se->QueryInterface(kInterface_Papyrus);
@@ -160,7 +160,7 @@ void OnF4SEMessageReceived(F4SEMessagingInterface::Message* message)
 {
 	if (message)
 	{
-		_MESSAGE("Received SKSE message %d", message->type);
+		_MESSAGE("Received F4SE message %d", message->type);
 		if (message->type == F4SEMessagingInterface::kMessage_PostPostLoad)
 		{
 			if (g_messagingInterface && g_pluginHandle)
