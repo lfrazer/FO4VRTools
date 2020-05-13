@@ -29,22 +29,22 @@ public:
 inline OpenVRHookManagerAPI* RequestOpenVRHookManagerObject()
 {
 	typedef OpenVRHookManagerAPI* (*GetVRHookMgrFuncPtr_t)();
-	HMODULE skyrimVRToolsModule = LoadLibraryA("skyrimvrtools.dll");
-	if (skyrimVRToolsModule != nullptr)
+	HMODULE FO4VRToolsModule = LoadLibraryA("FO4VRTools.dll");
+	if (FO4VRToolsModule != nullptr)
 	{
-		GetVRHookMgrFuncPtr_t vrHookGetFunc = (GetVRHookMgrFuncPtr_t)GetProcAddress(skyrimVRToolsModule, "GetVRHookManager");
+		GetVRHookMgrFuncPtr_t vrHookGetFunc = (GetVRHookMgrFuncPtr_t)GetProcAddress(FO4VRToolsModule, "GetVRHookManager");
 		if (vrHookGetFunc)
 		{
 			return vrHookGetFunc();
 		}
 		else
 		{
-			_MESSAGE("Failed to get address of function GetVRHookmanager from skyrimvrtools.dll in RequestOpenVRHookManagerObject().  Is your skyrimvrtools.dll out of date?");
+			_MESSAGE("Failed to get address of function GetVRHookmanager from FO4VRTools.dll in RequestOpenVRHookManagerObject().  Is your skyrimvrtools.dll out of date?");
 		}
 	}
 	else
 	{
-		_MESSAGE("Failed to load skyrimvrtools.dll in RequestOpenVRHookManagerObject()");
+		_MESSAGE("Failed to load FO4VRTools.dll in RequestOpenVRHookManagerObject()");
 	}
 	
 	return nullptr;
