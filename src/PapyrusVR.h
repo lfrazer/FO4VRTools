@@ -59,13 +59,13 @@ namespace PapyrusVR
 	void GetSteamVRDevicePosition(StaticFunctionTag *base, SInt32 deviceEnum, VMArray<float> returnValues);
 
 	// Returns a Vector3 with the device rotation(in degrees) in Skyrim world space
-	void GetSkyrimDeviceRotation(StaticFunctionTag *base, SInt32 deviceEnum, VMArray<float> returnValues);
+	void GetFO4DeviceRotation(StaticFunctionTag *base, SInt32 deviceEnum, VMArray<float> returnValues);
 
 	// Returns a Quaternion with the device rotation in Skyrim world space
-	void GetSkyrimDeviceQRotation(StaticFunctionTag *base, SInt32 deviceEnum, VMArray<float> returnValues);
+	void GetFO4DeviceQRotation(StaticFunctionTag *base, SInt32 deviceEnum, VMArray<float> returnValues);
 
 	// Returns a Vector3 with the device position(in meters) in Skyrim world space
-	void GetSkyrimDevicePosition(StaticFunctionTag *base, SInt32 deviceEnum, VMArray<float> returnValues);
+	void GetFO4DevicePosition(StaticFunctionTag *base, SInt32 deviceEnum, VMArray<float> returnValues);
 
 	// Creates new local collision sphere with parameters (radius, Vector3 position, Quaternion rotation, Attached Device (can be none))
 	UInt32 RegisterLocalOverlapSphere(StaticFunctionTag *base, float radius, VMArray<float> position, VMArray<float> rotation, SInt32 deviceEnum);

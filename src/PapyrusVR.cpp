@@ -76,7 +76,10 @@ namespace PapyrusVR
 			void operator() (const EventRegistration<TESForm*> & reg)
 			{
 				VirtualMachine* registry = (*g_gameVM)->m_virtualMachine;
-				registry->QueueEvent(reg.handle, &eventName, this);
+				//registry->QueueEvent(reg.handle, &eventName, this);
+
+				// NOTE: Workaround for unfinished RE of QueueEvent in F4SE --> See the comment in PapyrusEventsDef_Base.inl  "This should eventually replaced by an actual call to the Event Queue (VM+0x158), this is a workaround for now"
+				SendPapyrusEvent3<SInt32, SInt32, SInt32>(reg.handle, reg.scriptName, eventName, param1, param2, param3);
 			}
 
 		private:
@@ -92,40 +95,40 @@ namespace PapyrusVR
 		#pragma region SteamVR Coordinates
 			void GetSteamVRDeviceRotation(StaticFunctionTag *base, SInt32 deviceEnum, VMArray<float> returnValues)
 			{
-				_MESSAGE("GetSteamVRDeviceRotation");
+				//_MESSAGE("GetSteamVRDeviceRotation");
 				CopyPoseToVMArray(deviceEnum, &returnValues, PoseParam::Rotation);
 			}
 
 			void GetSteamVRDeviceQRotation(StaticFunctionTag *base, SInt32 deviceEnum, VMArray<float> returnValues)
 			{
-				_MESSAGE("GetSteamVRDeviceQRotation");
+				//_MESSAGE("GetSteamVRDeviceQRotation");
 				CopyPoseToVMArray(deviceEnum, &returnValues, PoseParam::QRotation);
 			}
 
 			void GetSteamVRDevicePosition(StaticFunctionTag *base, SInt32 deviceEnum, VMArray<float> returnValues)
 			{
-				_MESSAGE("GetSteamVRDevicePosition");
+				//_MESSAGE("GetSteamVRDevicePosition");
 				CopyPoseToVMArray(deviceEnum, &returnValues, PoseParam::Position);
 
 			}
 		#pragma endregion
 
 		#pragma region Skyrim Coordinates
-			void GetSkyrimDeviceRotation(StaticFunctionTag *base, SInt32 deviceEnum, VMArray<float> returnValues)
+			void GetFO4DeviceRotation(StaticFunctionTag *base, SInt32 deviceEnum, VMArray<float> returnValues)
 			{
-				_MESSAGE("GetSkyrimDeviceRotation");
+				//_MESSAGE("GetSkyrimDeviceRotation");
 				CopyPoseToVMArray(deviceEnum, &returnValues, PoseParam::Rotation, true);
 			}
 
-			void GetSkyrimDeviceQRotation(StaticFunctionTag *base, SInt32 deviceEnum, VMArray<float> returnValues)
+			void GetFO4DeviceQRotation(StaticFunctionTag *base, SInt32 deviceEnum, VMArray<float> returnValues)
 			{
-				_MESSAGE("GetSkyrimDeviceQRotation");
+				//_MESSAGE("GetSkyrimDeviceQRotation");
 				CopyPoseToVMArray(deviceEnum, &returnValues, PoseParam::QRotation, true);
 			}
 
-			void GetSkyrimDevicePosition(StaticFunctionTag *base, SInt32 deviceEnum, VMArray<float> returnValues)
+			void GetFO4DevicePosition(StaticFunctionTag *base, SInt32 deviceEnum, VMArray<float> returnValues)
 			{
-				_MESSAGE("GetSkyrimDevicePosition");
+				//_MESSAGE("GetSkyrimDevicePosition");
 				CopyPoseToVMArray(deviceEnum, &returnValues, PoseParam::Position, true);
 			}
 		#pragma endregion
@@ -135,14 +138,14 @@ namespace PapyrusVR
 			{
 				GenericPapyrusRegisterForEvent(object, regHolder);
 				if (object && object->formID)
-					_MESSAGE("%d registered", object->formID);
+					_MESSAGE("%d event registered", object->formID);
 			}
 
 			void FormUnregisterForEvent(TESForm* object, RegistrationSetHolder<TESForm*>* regHolder)
 			{
 				GenericPapyrusUnregisterForEvent(object, regHolder);
 				if (object && object->formID)
-					_MESSAGE("%d unregistered", object->formID);
+					_MESSAGE("%d event unregistered", object->formID);
 			}
 
 			void RegisterForPoseUpdates(StaticFunctionTag *base,	TESForm* thisForm)
@@ -284,11 +287,12 @@ namespace PapyrusVR
 	void OnVRButtonEventReceived(VREventType eventType, EVRButtonId buttonId, VRDevice deviceId)
 	{
 #if ENABLE_PAPYRUS
-		_MESSAGE("Dispatching eventType %d for button with ID: %d from device %d", eventType, buttonId, deviceId);
+		//_MESSAGE("Dispatching eventType %d for button with ID: %d from device %d", eventType, buttonId, deviceId);
 		//Notify Papyrus scripts
 		if (g_vrButtonEventRegs.m_data.size() > 0)
 			g_vrButtonEventRegs.ForEach(
 				EventFunctor3( BSFixedString( vrButtonEventName), eventType, buttonId, deviceId)
+				
 			);
 #endif
 	}
@@ -296,7 +300,7 @@ namespace PapyrusVR
 	void OnVROverlapEventReceived(VROverlapEvent eventType, UInt32 objectHandle, VRDevice deviceId)
 	{
 #if ENABLE_PAPYRUS
-		_MESSAGE("Dispatching overlap %d for device with ID: %d from handle %d", eventType, deviceId, objectHandle);
+		//_MESSAGE("Dispatching overlap %d for device with ID: %d from handle %d", eventType, deviceId, objectHandle);
 		//Notify Papyrus scripts
 		if (g_vrOverlapEventRegs.m_data.size() > 0)
 			g_vrOverlapEventRegs.ForEach(
@@ -308,7 +312,7 @@ namespace PapyrusVR
 	void OnVRHapticEventReceived(UInt32 axisID, UInt32 pulseDuration, VRDevice device)
 	{
 #if ENABLE_PAPYRUS
-		_MESSAGE("Dispatching haptic event for device with ID: %d with axisID %d and duration %d", device, axisID, pulseDuration);
+		//_MESSAGE("Dispatching haptic event for device with ID: %d with axisID %d and duration %d", device, axisID, pulseDuration);
 		//Notify Papyrus scripts
 		if (g_vrHapticEventRegs.m_data.size() > 0)
 			g_vrHapticEventRegs.ForEach(
@@ -324,9 +328,9 @@ namespace PapyrusVR
 		vm->RegisterFunction(new NativeFunction2 <StaticFunctionTag, void, SInt32, VMArray<float>>("GetSteamVRDeviceRotation_Native", "PapyrusVR", PapyrusVR::GetSteamVRDeviceRotation, vm));
 		vm->RegisterFunction(new NativeFunction2 <StaticFunctionTag, void, SInt32, VMArray<float>>("GetSteamVRDeviceQRotation_Native", "PapyrusVR", PapyrusVR::GetSteamVRDeviceQRotation, vm));
 		vm->RegisterFunction(new NativeFunction2 <StaticFunctionTag, void, SInt32, VMArray<float>>("GetSteamVRDevicePosition_Native", "PapyrusVR", PapyrusVR::GetSteamVRDevicePosition, vm));
-		vm->RegisterFunction(new NativeFunction2 <StaticFunctionTag, void, SInt32, VMArray<float>>("GetSkyrimDeviceRotation_Native", "PapyrusVR", PapyrusVR::GetSkyrimDeviceRotation, vm));
-		vm->RegisterFunction(new NativeFunction2 <StaticFunctionTag, void, SInt32, VMArray<float>>("GetSkyrimDeviceQRotation_Native", "PapyrusVR", PapyrusVR::GetSkyrimDeviceQRotation, vm));
-		vm->RegisterFunction(new NativeFunction2 <StaticFunctionTag, void, SInt32, VMArray<float>>("GetSkyrimDevicePosition_Native", "PapyrusVR", PapyrusVR::GetSkyrimDevicePosition, vm));
+		vm->RegisterFunction(new NativeFunction2 <StaticFunctionTag, void, SInt32, VMArray<float>>("GetFO4DeviceRotation_Native", "PapyrusVR", PapyrusVR::GetFO4DeviceRotation, vm));
+		vm->RegisterFunction(new NativeFunction2 <StaticFunctionTag, void, SInt32, VMArray<float>>("GetFO4DeviceQRotation_Native", "PapyrusVR", PapyrusVR::GetFO4DeviceQRotation, vm));
+		vm->RegisterFunction(new NativeFunction2 <StaticFunctionTag, void, SInt32, VMArray<float>>("GetFO4DevicePosition_Native", "PapyrusVR", PapyrusVR::GetFO4DevicePosition, vm));
 
 		vm->RegisterFunction(new NativeFunction4 <StaticFunctionTag, UInt32, float, VMArray<float>, VMArray<float>, SInt32>("RegisterLocalOverlapSphere", "PapyrusVR", PapyrusVR::RegisterLocalOverlapSphere, vm));
 		vm->RegisterFunction(new NativeFunction1 <StaticFunctionTag, void, UInt32>("DestroyLocalOverlapObject", "PapyrusVR", PapyrusVR::DestroyLocalOverlapObject, vm));
@@ -342,13 +346,6 @@ namespace PapyrusVR
 
 		vm->RegisterFunction(new NativeFunction0 <StaticFunctionTag, void>("TimeSinceLastCall", "PapyrusVR", PapyrusVR::TimeSinceLastCall, vm)); //Debug function
 
-		/*_MESSAGE("Creating trampoline");
-		if (!l_LocalBranchTrampoline.Create(1024 * 64))
-		{
-			_MESSAGE("Can't create local branch trampoline!");
-			return false;
-		}*/
-
 		_MESSAGE("Registering for VR Button Events");
 		VRManager::GetInstance().RegisterVRButtonListener(PapyrusVR::OnVRButtonEventReceived);
 
@@ -359,8 +356,6 @@ namespace PapyrusVR
 		_MESSAGE("Registering for VR Haptic Events");
 		VRManager::GetInstance().RegisterVRHapticListener(PapyrusVR::OnVRHapticEventReceived);
 		
-		/*_MESSAGE("Hooking into OpenVR calls");
-		l_LocalBranchTrampoline.Write5Call(OpenVR_Call, GetFnAddr(&PapyrusVR::OnVRUpdate));*/
 
 		return true;
 	}

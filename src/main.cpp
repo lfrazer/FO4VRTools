@@ -71,7 +71,7 @@ extern "C"
 			return false;
 		}
 
-		_MESSAGE("FO4VRTools v%d query passed", info->version);
+		_MESSAGE("FO4VRTools v%x query passed", info->version);
 
 		// ### do not do anything else in this callback
 		// ### only fill out PluginInfo and return true/false
@@ -110,16 +110,15 @@ extern "C"
 		//Debug
 		//__debugbreak();
 
-		//Papyrus
-		/*
+		// Register PapyrusVR events & functions
 		_MESSAGE("Registering Papyrus native functions...");
 		btest = g_papyrus->Register(PapyrusVR::RegisterFuncs);
-		if (btest) {
+		if (btest)
+		{
 			_MESSAGE("Papyrus Functions Register Succeeded");
 		}
-		*/
 
-		//Scaleform
+		//Scaleform (not supported in FO4)
 		/*
 		btest &= g_scaleform->Register("vrinput", ScaleformVR::RegisterFuncs);
 		if (btest) {
