@@ -75,14 +75,14 @@ namespace PapyrusVR
 		void FormRegisterForEvent(TESForm* object, RegistrationSetHolder<TESForm*>* regHolder);
 
 		//Used by papyrus scripts to register for Events
-		void RegisterForPoseUpdates(StaticFunctionTag *base, TESForm * thisForm);	
-		void UnregisterForPoseUpdates(StaticFunctionTag *base, TESForm * thisForm);
-		void RegisterForVRButtonEvents(StaticFunctionTag *base, TESForm * thisForm);
-		void UnregisterForVRButtonEvents(StaticFunctionTag *base, TESForm * thisForm);
-		void RegisterForVROverlapEvents(StaticFunctionTag *base, TESForm * thisForm);
-		void UnregisterForVROverlapEvents(StaticFunctionTag *base, TESForm * thisForm);
-		void RegisterForVRHapticEvents(StaticFunctionTag *base, TESForm * thisForm);
-		void UnregisterForVRHapticEvents(StaticFunctionTag *base, TESForm * thisForm);
+		void RegisterForPoseUpdates(StaticFunctionTag *base, VMObject* thisForm);	
+		void UnregisterForPoseUpdates(StaticFunctionTag *base, VMObject* thisForm);
+		void RegisterForVRButtonEvents(StaticFunctionTag *base, VMObject* thisForm);
+		void UnregisterForVRButtonEvents(StaticFunctionTag *base, VMObject* thisForm);
+		void RegisterForVROverlapEvents(StaticFunctionTag *base, VMObject* thisForm);
+		void UnregisterForVROverlapEvents(StaticFunctionTag *base, VMObject* thisForm);
+		void RegisterForVRHapticEvents(StaticFunctionTag *base, VMObject* thisForm);
+		void UnregisterForVRHapticEvents(StaticFunctionTag *base, VMObject* thisForm);
 	#pragma endregion
 
 	void TimeSinceLastCall(StaticFunctionTag* base);

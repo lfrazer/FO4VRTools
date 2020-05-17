@@ -47,7 +47,7 @@ void GenericDispactchEvent(std::list<ListenerCallbackT>* listenerLists, std::mut
 
 #pragma region Papyrus Events
 
-
+/*
 template<class T>
 void GenericPapyrusUnregisterForEvent(T* object, RegistrationSetHolder<T*>* regHolder)
 {
@@ -72,5 +72,6 @@ void GenericPapyrusRegisterForEvent(T* object, RegistrationSetHolder<T*>* regHol
 
 	(*regHolder).Register( (UInt32)object->GetFormType(), object->GetFullName(), object);
 };
+*/
 
 #pragma endregion

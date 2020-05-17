@@ -11,19 +11,19 @@ namespace PapyrusVR
 
 	//Custom Pose Event
 	const char* poseUpdateEventName = "OnPosesUpdate";
-	RegistrationSetHolder<TESForm*>				g_posesUpdateEventRegs;
+	RegistrationSetHolder<NullParameters>				g_posesUpdateEventRegs;
 
 	//Custom Button Events
 	const char* vrButtonEventName = "OnVRButtonEvent";
-	RegistrationSetHolder<TESForm*>				g_vrButtonEventRegs;
+	RegistrationSetHolder<NullParameters>				g_vrButtonEventRegs;
 
 	//Custom Overlap Events
 	const char* vrOverlapEventName = "OnVROverlapEvent";
-	RegistrationSetHolder<TESForm*>				g_vrOverlapEventRegs;
+	RegistrationSetHolder<NullParameters>				g_vrOverlapEventRegs;
 
 	//Custom Haptics Events
 	const char* vrHapticEventName = "OnVRHapticEvent";
-	RegistrationSetHolder<TESForm*>				g_vrHapticEventRegs;
+	RegistrationSetHolder<NullParameters>				g_vrHapticEventRegs;
 
 	// IFunctionArguments don't exist in fallout..
 #if ENABLE_PAPYRUS
@@ -73,7 +73,7 @@ namespace PapyrusVR
 				return true; 
 			}
 
-			void operator() (const EventRegistration<TESForm*> & reg)
+			void operator() (const EventRegistration<NullParameters> & reg)
 			{
 				VirtualMachine* registry = (*g_gameVM)->m_virtualMachine;
 				//registry->QueueEvent(reg.handle, &eventName, this);
@@ -134,6 +134,7 @@ namespace PapyrusVR
 		#pragma endregion
 
 		#pragma region Events Management
+			/*
 			void FormRegisterForEvent(TESForm* object, RegistrationSetHolder<TESForm*>* regHolder)
 			{
 				GenericPapyrusRegisterForEvent(object, regHolder);
@@ -147,50 +148,77 @@ namespace PapyrusVR
 				if (object && object->formID)
 					_MESSAGE("FormID: %x event unregistered", object->formID);
 			}
+			*/
 
-			void RegisterForPoseUpdates(StaticFunctionTag *base,	TESForm* thisForm)
+			void RegisterForPoseUpdates(StaticFunctionTag* base, VMObject* thisObject)
 			{
+				if (!thisObject)
+					return;
+
 				_MESSAGE("RegisterForPoseUpdates");
-				FormRegisterForEvent(thisForm, &g_posesUpdateEventRegs);
+
+				g_posesUpdateEventRegs.Register(thisObject->GetHandle(), thisObject->GetObjectType());
 			}
 
-			void UnregisterForPoseUpdates(StaticFunctionTag *base,	TESForm* thisForm)
+			void UnregisterForPoseUpdates(StaticFunctionTag* base, VMObject* thisObject)
 			{
+				if (!thisObject)
+					return;
+
 				_MESSAGE("UnregisterForPoseUpdates");
-				FormUnregisterForEvent(thisForm, &g_posesUpdateEventRegs);
+
+				g_posesUpdateEventRegs.Unregister(thisObject->GetHandle(), thisObject->GetObjectType());
 			}
 
-			void RegisterForVRButtonEvents(StaticFunctionTag *base, TESForm * thisForm)
+			void RegisterForVRButtonEvents(StaticFunctionTag* base, VMObject* thisObject)
 			{
+				if (!thisObject)
+					return;
+
 				_MESSAGE("RegisterForVRButtonEvents");
-				FormRegisterForEvent(thisForm, &g_vrButtonEventRegs);
+				g_vrButtonEventRegs.Register(thisObject->GetHandle(), thisObject->GetObjectType());
 			}
 
-			void UnregisterForVRButtonEvents(StaticFunctionTag *base, TESForm * thisForm)
+			void UnregisterForVRButtonEvents(StaticFunctionTag* base, VMObject* thisObject)
 			{
+				if (!thisObject)
+					return;
+
 				_MESSAGE("UnregisterForVRButtonEvents");
-				FormUnregisterForEvent(thisForm, &g_vrButtonEventRegs);
+				g_vrButtonEventRegs.Unregister(thisObject->GetHandle(), thisObject->GetObjectType());
 			}
-			void RegisterForVROverlapEvents(StaticFunctionTag *base, TESForm * thisForm)
+			void RegisterForVROverlapEvents(StaticFunctionTag* base, VMObject* thisObject)
 			{
+				if (!thisObject)
+					return;
+
 				_MESSAGE("RegisterForVROverlapEvents");
-				FormRegisterForEvent(thisForm, &g_vrOverlapEventRegs);
+				g_vrOverlapEventRegs.Register(thisObject->GetHandle(), thisObject->GetObjectType());
 			}
 
-			void UnregisterForVROverlapEvents(StaticFunctionTag *base, TESForm * thisForm)
+			void UnregisterForVROverlapEvents(StaticFunctionTag* base, VMObject* thisObject)
 			{
+				if (!thisObject)
+					return;
+
 				_MESSAGE("UnregisterForVROverlapEvents");
-				FormUnregisterForEvent(thisForm, &g_vrOverlapEventRegs);
+				g_vrOverlapEventRegs.Unregister(thisObject->GetHandle(), thisObject->GetObjectType());
 			}
-			void RegisterForVRHapticEvents(StaticFunctionTag *base, TESForm * thisForm)
+			void RegisterForVRHapticEvents(StaticFunctionTag* base, VMObject* thisObject)
 			{
+				if (!thisObject)
+					return;
+
 				_MESSAGE("RegisterForVRHapticEvents");
-				FormRegisterForEvent(thisForm, &g_vrHapticEventRegs);
+				g_vrHapticEventRegs.Register(thisObject->GetHandle(), thisObject->GetObjectType());
 			}
-			void UnregisterForVRHapticEvents(StaticFunctionTag *base, TESForm * thisForm)
+			void UnregisterForVRHapticEvents(StaticFunctionTag* base, VMObject* thisObject)
 			{
+				if (!thisObject)
+					return;
+
 				_MESSAGE("UnregisterForVRHapticEvents");
-				FormUnregisterForEvent(thisForm, &g_vrHapticEventRegs);
+				g_vrHapticEventRegs.Unregister(thisObject->GetHandle(), thisObject->GetObjectType());
 			}
 		#pragma endregion
 
@@ -335,14 +363,14 @@ namespace PapyrusVR
 		vm->RegisterFunction(new NativeFunction4 <StaticFunctionTag, UInt32, float, VMArray<float>, VMArray<float>, SInt32>("RegisterLocalOverlapSphere", "PapyrusVR", PapyrusVR::RegisterLocalOverlapSphere, vm));
 		vm->RegisterFunction(new NativeFunction1 <StaticFunctionTag, void, UInt32>("DestroyLocalOverlapObject", "PapyrusVR", PapyrusVR::DestroyLocalOverlapObject, vm));
 
-		vm->RegisterFunction(new NativeFunction1 <StaticFunctionTag, void, TESForm*>("RegisterForPoseUpdates", "PapyrusVR", PapyrusVR::RegisterForPoseUpdates, vm));
-		vm->RegisterFunction(new NativeFunction1 <StaticFunctionTag, void, TESForm*>("UnregisterForPoseUpdates", "PapyrusVR", PapyrusVR::UnregisterForPoseUpdates, vm));
-		vm->RegisterFunction(new NativeFunction1 <StaticFunctionTag, void, TESForm*>("RegisterForVRButtonEvents", "PapyrusVR", PapyrusVR::RegisterForVRButtonEvents, vm));
-		vm->RegisterFunction(new NativeFunction1 <StaticFunctionTag, void, TESForm*>("UnregisterForVRButtonEvents", "PapyrusVR", PapyrusVR::UnregisterForVRButtonEvents, vm));
-		vm->RegisterFunction(new NativeFunction1 <StaticFunctionTag, void, TESForm*>("RegisterForVROverlapEvents", "PapyrusVR", PapyrusVR::RegisterForVROverlapEvents, vm));
-		vm->RegisterFunction(new NativeFunction1 <StaticFunctionTag, void, TESForm*>("UnregisterForVROverlapEvents", "PapyrusVR", PapyrusVR::UnregisterForVROverlapEvents, vm));
-		vm->RegisterFunction(new NativeFunction1 <StaticFunctionTag, void, TESForm*>("RegisterForVRHapticEvents", "PapyrusVR", PapyrusVR::RegisterForVRHapticEvents, vm));
-		vm->RegisterFunction(new NativeFunction1 <StaticFunctionTag, void, TESForm*>("UnregisterForVRHapticEvents", "PapyrusVR", PapyrusVR::UnregisterForVRHapticEvents, vm));
+		vm->RegisterFunction(new NativeFunction1 <StaticFunctionTag, void, VMObject*>("RegisterForPoseUpdates", "PapyrusVR", PapyrusVR::RegisterForPoseUpdates, vm));
+		vm->RegisterFunction(new NativeFunction1 <StaticFunctionTag, void, VMObject*>("UnregisterForPoseUpdates", "PapyrusVR", PapyrusVR::UnregisterForPoseUpdates, vm));
+		vm->RegisterFunction(new NativeFunction1 <StaticFunctionTag, void, VMObject*>("RegisterForVRButtonEvents", "PapyrusVR", PapyrusVR::RegisterForVRButtonEvents, vm));
+		vm->RegisterFunction(new NativeFunction1 <StaticFunctionTag, void, VMObject*>("UnregisterForVRButtonEvents", "PapyrusVR", PapyrusVR::UnregisterForVRButtonEvents, vm));
+		vm->RegisterFunction(new NativeFunction1 <StaticFunctionTag, void, VMObject*>("RegisterForVROverlapEvents", "PapyrusVR", PapyrusVR::RegisterForVROverlapEvents, vm));
+		vm->RegisterFunction(new NativeFunction1 <StaticFunctionTag, void, VMObject*>("UnregisterForVROverlapEvents", "PapyrusVR", PapyrusVR::UnregisterForVROverlapEvents, vm));
+		vm->RegisterFunction(new NativeFunction1 <StaticFunctionTag, void, VMObject*>("RegisterForVRHapticEvents", "PapyrusVR", PapyrusVR::RegisterForVRHapticEvents, vm));
+		vm->RegisterFunction(new NativeFunction1 <StaticFunctionTag, void, VMObject*>("UnregisterForVRHapticEvents", "PapyrusVR", PapyrusVR::UnregisterForVRHapticEvents, vm));
 
 		vm->RegisterFunction(new NativeFunction0 <StaticFunctionTag, void>("TimeSinceLastCall", "PapyrusVR", PapyrusVR::TimeSinceLastCall, vm)); //Debug function
 

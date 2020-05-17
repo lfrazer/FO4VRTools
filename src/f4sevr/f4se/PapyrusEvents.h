@@ -450,7 +450,7 @@ public:
 		Release();
 	}
 
-
+	/*
 	template <typename T>
 	void Register(UInt32 type, const BSFixedString& scriptName,  T* classType, D* params = NULL)
 	{
@@ -470,6 +470,7 @@ public:
 
 		Release();
 	}
+	*/
 
 	void Unregister(UInt64 handle, const BSFixedString& scriptName)
 	{
@@ -488,6 +489,7 @@ public:
 		Release();
 	}
 
+	/*
 	template <typename T>
 	void Unregister(UInt32 type, const BSFixedString& scriptName, T* classType)
 	{
@@ -505,6 +507,7 @@ public:
 
 		Release();
 	}
+	*/
 
 	template <typename F>
 	void ForEach(F & functor)

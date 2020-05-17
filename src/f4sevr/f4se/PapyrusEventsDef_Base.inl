@@ -146,5 +146,9 @@ void EVENT_NAME(
 #endif
 #if EVENT_OBJECT
 	}
+	else
+	{
+		_MESSAGE("GetIdentifier() failed when sending papyrus event. handle=%llx classname=%s", handle, className.c_str());
+	}
 #endif
 }
