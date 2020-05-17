@@ -138,14 +138,14 @@ namespace PapyrusVR
 			{
 				GenericPapyrusRegisterForEvent(object, regHolder);
 				if (object && object->formID)
-					_MESSAGE("%d event registered", object->formID);
+					_MESSAGE("FormID: %x event registered", object->formID);
 			}
 
 			void FormUnregisterForEvent(TESForm* object, RegistrationSetHolder<TESForm*>* regHolder)
 			{
 				GenericPapyrusUnregisterForEvent(object, regHolder);
 				if (object && object->formID)
-					_MESSAGE("%d event unregistered", object->formID);
+					_MESSAGE("FormID: %x event unregistered", object->formID);
 			}
 
 			void RegisterForPoseUpdates(StaticFunctionTag *base,	TESForm* thisForm)

@@ -57,7 +57,7 @@ void GenericPapyrusUnregisterForEvent(T* object, RegistrationSetHolder<T*>* regH
 		return;
 	}
 
-	(*regHolder).Unregister(object->GetFormType(), object->GetFullName());
+	(*regHolder).Unregister((UInt32)object->GetFormType(), object->GetFullName(), object);
 }
 
 
@@ -70,7 +70,7 @@ void GenericPapyrusRegisterForEvent(T* object, RegistrationSetHolder<T*>* regHol
 		return;
 	}
 
-	(*regHolder).Register(object->GetFormType(), object->GetFullName());
+	(*regHolder).Register( (UInt32)object->GetFormType(), object->GetFullName(), object);
 };
 
 #pragma endregion

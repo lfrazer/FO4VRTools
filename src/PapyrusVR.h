@@ -73,7 +73,6 @@ namespace PapyrusVR
 
 	#pragma region Event Registration
 		void FormRegisterForEvent(TESForm* object, RegistrationSetHolder<TESForm*>* regHolder);
-		void FormRegisterForEvent(TESForm* object, RegistrationSetHolder<TESForm*>* regHolder);
 
 		//Used by papyrus scripts to register for Events
 		void RegisterForPoseUpdates(StaticFunctionTag *base, TESForm * thisForm);	
