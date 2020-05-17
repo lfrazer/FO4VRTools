@@ -134,21 +134,6 @@ namespace PapyrusVR
 		#pragma endregion
 
 		#pragma region Events Management
-			/*
-			void FormRegisterForEvent(TESForm* object, RegistrationSetHolder<TESForm*>* regHolder)
-			{
-				GenericPapyrusRegisterForEvent(object, regHolder);
-				if (object && object->formID)
-					_MESSAGE("FormID: %x event registered", object->formID);
-			}
-
-			void FormUnregisterForEvent(TESForm* object, RegistrationSetHolder<TESForm*>* regHolder)
-			{
-				GenericPapyrusUnregisterForEvent(object, regHolder);
-				if (object && object->formID)
-					_MESSAGE("FormID: %x event unregistered", object->formID);
-			}
-			*/
 
 			void RegisterForPoseUpdates(StaticFunctionTag* base, VMObject* thisObject)
 			{

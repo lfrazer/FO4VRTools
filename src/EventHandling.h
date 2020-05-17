@@ -44,34 +44,3 @@ void GenericDispactchEvent(std::list<ListenerCallbackT>* listenerLists, std::mut
 };
 
 #pragma endregion
-
-#pragma region Papyrus Events
-
-/*
-template<class T>
-void GenericPapyrusUnregisterForEvent(T* object, RegistrationSetHolder<T*>* regHolder)
-{
-	if (!object)
-	{
-		_MESSAGE("Called method with NULL parameter!");
-		return;
-	}
-
-	(*regHolder).Unregister((UInt32)object->GetFormType(), object->GetFullName(), object);
-}
-
-
-template<class T>
-void GenericPapyrusRegisterForEvent(T* object, RegistrationSetHolder<T*>* regHolder)
-{
-	if (!object)
-	{
-		_MESSAGE("Called method with NULL parameter!");
-		return;
-	}
-
-	(*regHolder).Register( (UInt32)object->GetFormType(), object->GetFullName(), object);
-};
-*/
-
-#pragma endregion
