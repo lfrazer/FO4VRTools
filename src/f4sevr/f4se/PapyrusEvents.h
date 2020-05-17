@@ -450,28 +450,6 @@ public:
 		Release();
 	}
 
-	/*
-	template <typename T>
-	void Register(UInt32 type, const BSFixedString& scriptName,  T* classType, D* params = NULL)
-	{
-		VirtualMachine* vm = (*g_gameVM)->m_virtualMachine;
-		IObjectHandlePolicy* policy = vm->GetHandlePolicy();
-
-		EventRegistration<D> reg;
-		reg.handle = policy->Create(type, (void*)classType);
-		reg.scriptName = scriptName;
-		if (params)
-			reg.params = *params;
-
-		Lock();
-
-		if (m_data.insert(reg).second)
-			policy->AddRef(reg.handle);
-
-		Release();
-	}
-	*/
-
 	void Unregister(UInt64 handle, const BSFixedString& scriptName)
 	{
 		VirtualMachine * vm = (*g_gameVM)->m_virtualMachine;
@@ -488,26 +466,6 @@ public:
 
 		Release();
 	}
-
-	/*
-	template <typename T>
-	void Unregister(UInt32 type, const BSFixedString& scriptName, T* classType)
-	{
-		VirtualMachine* vm = (*g_gameVM)->m_virtualMachine;
-		IObjectHandlePolicy* policy = vm->GetHandlePolicy();
-
-		EventRegistration<D> reg;
-		reg.handle = policy->Create(type, (void*)classType);
-		reg.scriptName = scriptName;
-
-		Lock();
-
-		if (m_data.erase(reg))
-			policy->Release(reg.handle);
-
-		Release();
-	}
-	*/
 
 	template <typename F>
 	void ForEach(F & functor)
