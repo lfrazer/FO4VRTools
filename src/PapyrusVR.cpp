@@ -334,6 +334,11 @@ namespace PapyrusVR
 #endif
 	}
 
+	void StartHaptics(StaticFunctionTag* base, SInt32 trackedControllerId, float hapticTime, float hapticIntensity)
+	{
+		OpenVRHookMgr::GetInstance()->StartHaptics((unsigned int)trackedControllerId, hapticTime, hapticIntensity);
+	}
+
 	//Entry Point
 	bool RegisterFuncs(VirtualMachine* vm) 
 	{
@@ -358,6 +363,7 @@ namespace PapyrusVR
 		vm->RegisterFunction(new NativeFunction1 <StaticFunctionTag, void, VMObject*>("UnregisterForVRHapticEvents", "PapyrusVR", PapyrusVR::UnregisterForVRHapticEvents, vm));
 
 		vm->RegisterFunction(new NativeFunction0 <StaticFunctionTag, void>("TimeSinceLastCall", "PapyrusVR", PapyrusVR::TimeSinceLastCall, vm)); //Debug function
+		vm->RegisterFunction(new NativeFunction3<StaticFunctionTag, void, SInt32, float, float>("StartHaptics", "PapyrusVR", PapyrusVR::StartHaptics, vm));
 
 		_MESSAGE("Registering for VR Button Events");
 		VRManager::GetInstance().RegisterVRButtonListener(PapyrusVR::OnVRButtonEventReceived);

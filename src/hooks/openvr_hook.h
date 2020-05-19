@@ -28,6 +28,9 @@
 #include "HookVRSystem.h"
 #include "HookVRCompositor.h"
 #include "openvr.h"
+#include "timer.h"
+
+const unsigned int kPluginVersionNum = 0x1;
 
 typedef void * (*VR_GetGenericInterfaceFunc)(const char *pchInterfaceVersion, vr::EVRInitError *peError);
 static std::map<std::string, IHookInterfaceFactory*> interfaceTranslationMap;
@@ -50,6 +53,9 @@ friend class HookVRSystem;
 friend class HookVRCompositor;
 
 public:
+
+	OpenVRHookMgr();
+
 	static OpenVRHookMgr* GetInstance();
 
 	void SetVRSystem(vr::IVRSystem* vrSystem)
@@ -92,11 +98,20 @@ public:
 		return mVRCompositor;
 	}
 
+	virtual unsigned int GetVersion() override
+	{
+		return kPluginVersionNum;
+	}
+
 	bool IsInitialized() override;
 	void RegisterControllerStateCB(GetControllerState_CB cbfunc) override;
 	void RegisterGetPosesCB(WaitGetPoses_CB cbfunc) override;
 	void UnregisterControllerStateCB(GetControllerState_CB cbfunc) override;
 	void UnregisterGetPosesCB(WaitGetPoses_CB cbfunc) override;
+
+	void StartHaptics(unsigned int trackedControllerId, float hapticTime, float hapticIntensity) override;
+
+	void UpdateHaptics();
 	
 private:
 	vr::IVRSystem* mVRSystem = nullptr;
@@ -106,6 +121,15 @@ private:
 
 	std::unordered_set<GetControllerState_CB> mGetControllerStateCallbacks;
 	std::unordered_set<WaitGetPoses_CB>	mWaitGetPosesCallbacks;
+
+	struct HapticTimeSettings
+	{
+		double time = 0.0;
+		int intensity = 2000;
+	};
+
+	CTimer mTimer;
+	HapticTimeSettings	mControllerHapticTime[2];
 
 	static OpenVRHookMgr* sInstance;
 };

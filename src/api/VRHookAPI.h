@@ -13,6 +13,7 @@ typedef vr::EVRCompositorError (*WaitGetPoses_CB)(VR_ARRAY_COUNT(unRenderPoseArr
 class OpenVRHookManagerAPI
 {
 public:
+	virtual unsigned int GetVersion() = 0;
     virtual bool IsInitialized() = 0;
 
     virtual void RegisterControllerStateCB(GetControllerState_CB cbfunc) = 0;
@@ -22,6 +23,8 @@ public:
 
 	virtual vr::IVRSystem* GetVRSystem() const = 0;
 	virtual vr::IVRCompositor* GetVRCompositor() const = 0;
+
+	virtual void StartHaptics(unsigned int trackedControllerId, float hapticTime, float hapticIntensity) = 0;
 };
 
 

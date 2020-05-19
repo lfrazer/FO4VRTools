@@ -97,6 +97,9 @@ namespace PapyrusVR
 
 
 	#pragma region Utility Methods
+	// easy way to start haptics over a few frames
+	void StartHaptics(StaticFunctionTag* base, SInt32 trackedControllerId, float hapticTime, float hapticIntensity);
+	
 	//Generic method to handle all pose requests from Papyrus
 	void CopyPoseToVMArray(UInt32 deviceType, VMArray<float>* resultArray, PoseParam parameter, bool skyrimWorldSpace = false);
 	#pragma endregion

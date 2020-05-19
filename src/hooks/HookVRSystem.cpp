@@ -121,6 +121,9 @@ bool HookVRSystem::GetControllerState(vr::TrackedDeviceIndex_t unControllerDevic
 	// lfrazer: We will always use finalState now incase mod authors want to do something special with inputs
 	memcpy(lastState, &finalState, sizeof(vr::VRControllerState_t));
 
+	// Finally, update haptics here too
+	OpenVRHookMgr::GetInstance()->UpdateHaptics();
+
 	return result;
 }
 

@@ -30,6 +30,11 @@ using namespace vr;
 
 OpenVRHookMgr* OpenVRHookMgr::sInstance = nullptr;
 
+OpenVRHookMgr::OpenVRHookMgr()
+{
+	mTimer.Init();
+}
+
 OpenVRHookMgr* OpenVRHookMgr::GetInstance()
 {
 	if (sInstance == nullptr)
@@ -77,6 +82,46 @@ void OpenVRHookMgr::UnregisterGetPosesCB(WaitGetPoses_CB cbfunc)
 		mWaitGetPosesCallbacks.erase(it);
 	}
 }
+
+
+void OpenVRHookMgr::StartHaptics(unsigned int trackedControllerId, float hapticTime, float hapticIntensity)
+{
+	const unsigned short kVRHapticConstant = 2000;  // max value is 3999 but ue4 suggest max 2000? - time in microseconds to pulse per frame, also described by Valve as "strength"
+
+	if (trackedControllerId > 0 && trackedControllerId < 3)
+	{
+		if (hapticIntensity > 1.0f)
+		{
+			hapticIntensity = 1.0f;
+		}
+		if (hapticIntensity < 0.0f)
+		{
+			hapticIntensity = 0.0f;
+		}
+
+		mControllerHapticTime[trackedControllerId - 1].time = mTimer.GetLastTime() + (double)hapticTime;
+		mControllerHapticTime[trackedControllerId - 1].intensity = (int)(kVRHapticConstant * hapticIntensity);
+	}
+}
+
+void OpenVRHookMgr::UpdateHaptics()
+{
+	mTimer.TimerUpdate();
+
+	if (mVRSystem)
+	{
+		for (int i = 0; i < 2; ++i)
+		{
+			if (mControllerHapticTime[i].time > mTimer.GetLastTime())
+			{
+				// haptic remaining times are indexed in array by (ETrackedControllerRole enum value - 1) - so add 1 to loop index i to get the correct value - see StartHaptics()
+				auto controllerId = mVRSystem->GetTrackedDeviceIndexForControllerRole((vr::ETrackedControllerRole)(i + 1));
+				mVRSystem->TriggerHapticPulse(controllerId, 0, mControllerHapticTime[i].intensity);
+			}
+		}
+	}
+}
+
 
 static VR_GetGenericInterfaceFunc  VR_GetGenericInterface_RealFunc;
 

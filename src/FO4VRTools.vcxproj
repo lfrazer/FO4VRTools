@@ -72,7 +72,7 @@
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <ModuleDefinitionFile>exports.def</ModuleDefinitionFile>
-      <AdditionalDependencies>shlwapi.lib;libs/*.lib;libs/Debug/*.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>shlwapi.lib;winmm.lib;libs/*.lib;libs/Debug/*.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <PostBuildEvent>
       <Command>if not "$(SkyrimVRPath)" == "" (
@@ -104,7 +104,7 @@
       <SubSystem>Windows</SubSystem>
       <OptimizeReferences>true</OptimizeReferences>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
-      <AdditionalDependencies>shlwapi.lib;libs/*.lib;libs/Release/*.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>shlwapi.lib;winmm.lib;libs/*.lib;libs/Release/*.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <PostBuildEvent>
       <Command>if not "$(SkyrimVRPath)" == "" (
@@ -118,6 +118,7 @@
     <ClCompile Include="hooks\HookVRCompositor.cpp" />
     <ClCompile Include="hooks\HookVRSystem.cpp" />
     <ClCompile Include="hooks\openvr_hook.cpp" />
+    <ClCompile Include="hooks\timer.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="PapyrusVR.cpp" />
     <None Include="ScaleformVR.cpp" />

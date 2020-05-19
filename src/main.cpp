@@ -19,8 +19,6 @@ static F4SEMessagingInterface		* g_messagingInterface = NULL;
 //API
 static PapyrusVRAPI apiMessage;
 
-const unsigned int kPluginVersionNum = 0x20;
-
 // Func prototype
 void OnF4SEMessageReceived(F4SEMessagingInterface::Message* message);
 
