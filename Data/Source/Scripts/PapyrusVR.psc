@@ -1,4 +1,4 @@
-ScriptName PapyrusVR Hidden
+Scriptname PapyrusVR Native Hidden
 ;       PAPYRUS VR
 ;       MIT License
 ;
@@ -58,10 +58,10 @@ Function GetSteamVRDeviceRotation_Native(int DeviceType, float[] returnValues) g
 Function GetSteamVRDeviceQRotation_Native(int DeviceType, float[] returnValues) global native
 Function GetSteamVRDevicePosition_Native(int DeviceType, float[] returnValues) global native
 
-;Skyrim Coordinates
-Function GetSkyrimDeviceRotation_Native(int DeviceType, float[] returnValues) global native
-Function GetSkyrimDeviceQRotation_Native(int DeviceType, float[] returnValues) global native
-Function GetSkyrimDevicePosition_Native(int DeviceType, float[] returnValues) global native
+;Fallout 4 Coordinates - Note: Currently unstable, use SteamVR Coordinates
+Function GetFO4DeviceRotation_Native(int DeviceType, float[] returnValues) global native
+Function GetFO4DeviceQRotation_Native(int DeviceType, float[] returnValues) global native
+Function GetFO4DevicePosition_Native(int DeviceType, float[] returnValues) global native
 
 ;Overlap Objects
 Function DestroyLocalOverlapObject(int objectHandle) global native
@@ -70,13 +70,16 @@ Function DestroyLocalOverlapObject(int objectHandle) global native
 ;returns ObjectHandle                       Meters     Vector3 Meters       Quaternion       EDeviceType
 int Function RegisterLocalOverlapSphere(float radius, float[] position, float[] rotation, int DeviceType) global native
 
+;Haptic Function
+Function StartHaptics(int DeviceType, float hapticsTime, float hapticIntensity) native global
+
 ;Events Registration
-Function RegisterForPoseUpdates(Form form) global native
-Function UnregisterForPoseUpdates(Form form) global native
-Function RegisterForVRButtonEvents(Form form) global native
-Function UnregisterForVRButtonEvents(Form form) global native
-Function RegisterForVROverlapEvents(Form form) global native
-Function UnregisterForVROverlapEvents(Form form) global native
+Function RegisterForPoseUpdates(ScriptObject akObject) native global
+Function UnregisterForPoseUpdates(ScriptObject akObject) native global
+Function RegisterForVRButtonEvents(ScriptObject akObject) native global
+Function UnregisterForVRButtonEvents(ScriptObject akObject) native global
+Function RegisterForVROverlapEvents(ScriptObject akObject) native global
+Function UnregisterForVROverlapEvents(ScriptObject akObject) native global
 
 ;Papyrus Native Functions Wrappers
 float[] Function GetSteamVRDeviceRotation(int DeviceType) global
@@ -97,21 +100,21 @@ float[] Function GetSteamVRDevicePosition(int DeviceType) global
     return returnValues
 EndFunction
 
-float[] Function GetSkyrimDeviceRotation(int DeviceType) global
+float[] Function GetFO4DeviceRotation(int DeviceType) global
     float[] returnValues = new float[3]
-    GetSkyrimDeviceRotation_Native(DeviceType, returnValues)
+    GetFO4DeviceRotation_Native(DeviceType, returnValues)
     return returnValues
 EndFunction
 
-float[] Function GetSkyrimDeviceQRotation(int DeviceType) global
+float[] Function GetFO4DeviceQRotation(int DeviceType) global
     float[] returnValues = new float[4]
-    GetSkyrimDeviceQRotation_Native(DeviceType, returnValues)
+    GetFO4DeviceQRotation_Native(DeviceType, returnValues)
     return returnValues
 EndFunction
 
-float[] Function GetSkyrimDevicePosition(int DeviceType) global
+float[] Function GetFO4DevicePosition(int DeviceType) global
     float[] returnValues = new float[3]
-    GetSkyrimDevicePosition_Native(DeviceType, returnValues)
+    GetFO4DevicePosition_Native(DeviceType, returnValues)
     return returnValues
 EndFunction
 
@@ -141,9 +144,12 @@ float[] Function Quaternion_Zero() global
     return Quaternion(0,0,0,0)
 EndFunction
 
-;Events
-Event OnVRButtonEvent(int eventType, int buttonId, int deviceId)
-EndEvent
+;Events - No longer used in F4SE. See example script.
+;Event OnVRButtonEvent(int eventType, int buttonId, int deviceId)
+;EndEvent
 
-Event OnVROverlapEvent(int overlapEventType, int objectHandle, int deviceId)
-EndEvent
+;Event OnVROverlapEvent(int overlapEventType, int objectHandle, int deviceId)
+;EndEvent
+
+
+
